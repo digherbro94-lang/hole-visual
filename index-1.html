@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hole Visual — Бесплатные визуалы для Minecraft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #07070b;
+      --bg-card: rgba(18, 18, 28, 0.75);
+      --bg-card-hover: rgba(28, 28, 42, 0.9);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-strong: rgba(255, 255, 255, 0.1);
+      --text: #f0f0f5;
+      --text-muted: #8b8b9e;
+      --accent: #8b5cf6;
+      --accent-hover: #a78bfa;
+      --accent-glow: rgba(139, 92, 246, 0.35);
+      --green: #22c55e;
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    .bg-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(139, 92, 246, 0.18), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(99, 102, 241, 0.08), transparent),
+        radial-gradient(ellipse 50% 30% at 20% 80%, rgba(168, 85, 247, 0.06), transparent);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: calc(100% - 48px);
+      max-width: 1100px;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(12, 12, 18, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 8px 8px 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 22px;
+      height: 22px;
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 999px;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .nav-btn {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 13.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 28px var(--accent-glow);
+    }
+
+    /* HERO */
+    .hero {
+      padding: 160px 0 80px;
+      text-align: center;
+      position: relative;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      color: var(--accent-hover);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+    }
+
+    .badge .free-tag {
+      background: var(--green);
+      color: #000;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      margin-left: 4px;
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 7vw, 64px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      background: linear-gradient(180deg, #fff 30%, #a5a5b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0 auto 12px;
+    }
+
+    .hero .versions {
+      font-size: 14px;
+      color: #6b6b7b;
+      margin-bottom: 36px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 60px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 24px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border: 1px solid var(--border-strong);
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    /* Floating mock UI */
+    .mock-wrapper {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      height: 380px;
+    }
+
+    .mock-card {
+      position: absolute;
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .mock-card:nth-child(2) { animation-delay: -1.5s; }
+    .mock-card:nth-child(3) { animation-delay: -3s; }
+    .mock-card:nth-child(4) { animation-delay: -4.5s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .mock-main {
+      left: 50%;
+      top: 40px;
+      transform: translateX(-50%);
+      width: 420px;
+      z-index: 2;
+    }
+
+    .mock-side {
+      width: 180px;
+      font-size: 12px;
+    }
+
+    .mock-side.left { left: 0; top: 80px; }
+    .mock-side.right { right: 0; top: 60px; }
+    .mock-side.bottom { left: 30px; bottom: 20px; width: 200px; }
+
+    .mock-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    .mock-tab {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: default;
+    }
+
+    .mock-tab.active {
+      background: rgba(139, 92, 246, 0.2);
+      color: var(--accent-hover);
+    }
+
+    .mock-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+
+    .toggle {
+      width: 36px;
+      height: 20px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 999px;
+      position: relative;
+    }
+
+    .toggle.on {
+      background: var(--accent);
+    }
+
+    .toggle::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: white;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: 0.2s;
+    }
+
+    .toggle.on::after {
+      left: 19px;
+    }
+
+    .mock-stat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .mock-stat strong {
+      color: var(--text);
+    }
+
+    .pixel-item {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #a78bfa, #6366f1);
+      border-radius: 8px;
+      margin: 12px auto;
+      box-shadow: 0 0 30px var(--accent-glow);
+      position: relative;
+    }
+
+    .pixel-item::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      background: linear-gradient(135deg, #c4b5fd, #818cf8);
+      border-radius: 4px;
+      opacity: 0.7;
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 80px 0;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-hover);
+      background: rgba(139, 92, 246, 0.12);
+      padding: 5px 12px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 16px;
+      max-width: 520px;
+      margin-bottom: 48px;
+    }
+
+    /* Feature grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: all 0.25s;
+    }
+
+    .feature-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(139, 92, 246, 0.25);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(139, 92, 246, 0.15);
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 28px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a78bfa, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Free highlight */
+    .free-banner {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(139, 92, 246, 0.12));
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .free-banner h3 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .free-banner p {
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .free-price {
+      font-size: 48px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #22c55e, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    /* FAQ */
+    .faq-list {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 600;
+      text-align: left;
+      padding: 20px 0;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-q span {
+      font-size: 20px;
+      color: var(--text-muted);
+      transition: 0.2s;
+    }
+
+    .faq-item.open .faq-q span {
+      transform: rotate(45deg);
+    }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .faq-item.open .faq-a {
+      max-height: 200px;
+      padding-bottom: 20px;
+    }
+
+    /* CTA bottom */
+    .cta-section {
+      text-align: center;
+      padding: 100px 0;
+    }
+
+    .cta-section h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .cta-section p {
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+      margin: 0 12px;
+    }
+
+    footer a:hover {
+      color: var(--text);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .mock-wrapper { height: 320px; }
+      .mock-main { width: 90%; max-width: 360px; }
+      .mock-side { display: none; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding-top: 130px; }
+      .stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <div class="logo-icon">◉</div>
+        Hole Visual
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Функции</a></li>
+        <li><a href="#download">Скачать</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#">Community</a></li>
+      </ul>
+      <button class="nav-btn">Скачать бесплатно</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="badge">
+        ◉ Hole Visual
+        <span class="free-tag">FREE</span>
+      </div>
+      <h1>Визуалы.<br>Полностью бесплатно.</h1>
+      <p>Крутые визуалы, HUD, частицы и косметика для Minecraft — без подписок и оплаты. Просто скачал и играешь.</p>
+      <div class="versions">Minecraft Java Edition 1.16.5 · 1.21.4 · 1.21.11 · Windows 10/11</div>
+      <div class="hero-ctas">
+        <button class="btn-primary">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Скачать бесплатно
+        </button>
+        <button class="btn-secondary">Смотреть функции</button>
+      </div>
+
+      <!-- Mock UI -->
+      <div class="mock-wrapper">
+        <div class="mock-card mock-main">
+          <div class="mock-tabs">
+            <div class="mock-tab active">Visuals</div>
+            <div class="mock-tab">HUD</div>
+            <div class="mock-tab">Utilities</div>
+          </div>
+          <div class="mock-row">
+            <span>Aspect Ratio</span>
+            <div class="toggle"></div>
+          </div>
+          <div class="mock-row">
+            <span>China Hit</span>
+            <div class="toggle on"></div>
+          </div>
+          <div class="mock-row">
+            <span>Crosshair</span>
+            <div class="toggle on"></div>
+          </div>
+          <div class="mock-row">
+            <span>Custom Hand</span>
+            <div class="toggle on"></div>
+          </div>
+          <div class="mock-row">
+            <span>Full Bright</span>
+            <div class="toggle"></div>
+          </div>
+          <div class="mock-row">
+            <span>Particles</span>
+            <div class="toggle on"></div>
+          </div>
+        </div>
+
+        <div class="mock-card mock-side left">
+          <div style="font-weight:600;margin-bottom:10px;font-size:13px;">Keybinds</div>
+          <div class="mock-row" style="font-size:11px;padding:6px 8px;">AutoFish <strong>Space</strong></div>
+          <div class="mock-row" style="font-size:11px;padding:6px 8px;">HUD <strong>V</strong></div>
+          <div class="mock-row" style="font-size:11px;padding:6px 8px;">Brightness <strong>K</strong></div>
+        </div>
+
+        <div class="mock-card mock-side right">
+          <div class="mock-stat">
+            <span style="color:#a78bfa;">●</span>
+            <strong>player</strong>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text-muted);">3 ms · <span style="color:#22c55e;">1732 FPS</span></div>
+          <div class="pixel-item"></div>
+          <div style="font-size:11px;text-align:center;color:var(--text-muted);">Custom Hand</div>
+        </div>
+
+        <div class="mock-card mock-side bottom">
+          <div style="font-weight:600;margin-bottom:8px;font-size:13px;">Potions</div>
+          <div style="font-size:11px;color:var(--text-muted);line-height:1.8;">
+            🔥 Fire Resistance II · 3s<br>
+            🍗 Hunger · 1m4s<br>
+            ⬆ Jump Boost · 1m4s<br>
+            ⚡ Speed II · 1m4s
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="container">
+      <div class="section-label">Бесплатно и без ограничений</div>
+      <h2 class="section-title">Всё, что нужно для красивой игры</h2>
+      <p class="section-desc">Hole Visual даёт полный доступ к визуалам, HUD и утилитам. Никаких платных подписок — всё бесплатно навсегда.</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Визуалы</h3>
+          <p>Particles, Trails, Target ESP, Jump Circles, Custom Hand, China Hit и десятки других эффектов.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🖥</div>
+          <h3>HUD</h3>
+          <p>Гибкий интерфейс, keybinds, potions tracker, death markers, FPS-счётчик и всё, что нужно.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✨</div>
+          <h3>Косметика</h3>
+          <p>Крылья, плащи, питомцы и эмоции — персонализируй персонажа бесплатно.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛠</div>
+          <h3>Utilities</h3>
+          <p>Fullbright, Aspect Ratio, Render Tweaks и полезные инструменты для комфортной игры.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3>Производительность</h3>
+          <p>Оптимизированный клиент, который не жрёт FPS и работает стабильно.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>Обновления</h3>
+          <p>Регулярные обновления и новые визуалы — всё бесплатно, без доплат.</p>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-value">100%</div>
+          <div class="stat-label">Бесплатно</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">50+</div>
+          <div class="stat-label">Визуальных эффектов</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">3</div>
+          <div class="stat-label">Версии Minecraft</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">24/7</div>
+          <div class="stat-label">Поддержка</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD / FREE -->
+  <section id="download">
+    <div class="container">
+      <div class="free-banner">
+        <div class="free-price">0 ₽</div>
+        <h3>Hole Visual — полностью бесплатно</h3>
+        <p>Скачивай, устанавливай и пользуйся всеми визуалами без ограничений и скрытых платежей.</p>
+        <button class="btn-primary">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Скачать сейчас
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div style="text-align:center;">
+        <div class="section-label">Частые вопросы</div>
+        <h2 class="section-title">Коротко о главном</h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q">Это правда бесплатно? <span>+</span></button>
+          <div class="faq-a">Да. Hole Visual полностью бесплатный. Все визуалы, HUD и функции доступны без оплаты и подписок.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Для каких версий Minecraft? <span>+</span></button>
+          <div class="faq-a">Minecraft Java Edition 1.16.5, 1.21.4 и 1.21.11 на Fabric. Версию выбираешь в лаунчере.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">На какой системе работает? <span>+</span></button>
+          <div class="faq-a">Windows 10 и 11 (64-bit). Другие системы пока не поддерживаются.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Можно ли играть на серверах? <span>+</span></button>
+          <div class="faq-a">Зависит от правил конкретного сервера. Проверяй, разрешены ли клиенты и визуалы.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Как установить? <span>+</span></button>
+          <div class="faq-a">Скачай клиент, запусти установщик, выбери версию Minecraft и играй. Всё займёт пару минут.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Готов играть красиво?</h2>
+      <p>Скачай Hole Visual бесплатно и сделай свой Minecraft лучше</p>
+      <button class="btn-primary">Скачать бесплатно</button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div style="margin-bottom:16px;">
+        <a href="#">Discord</a>
+        <a href="#">Telegram</a>
+        <a href="#">ВКонтакте</a>
+        <a href="#">Поддержка</a>
+      </div>
+      <div>© 2026 Hole Visual. Все визуалы бесплатны.</div>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.faq-q').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+</body>
+</html>
